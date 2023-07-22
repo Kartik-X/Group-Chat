@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Expense Trackker</title>
+    <link rel="stylesheet" type="text/css" href="signup_login.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="main">
+      <input type="checkbox" id="chk" />
+
+      <div class="signup">
+        <form action="/sign-up" method="post" id="signup_form">
+          <label for="">Sign up</label>
+          <input
+            type="text"
+            name="username"
+            id="signup_username"
+            placeholder="User name"
+            required=""
+          />
+          <input
+            type="text"
+            name="email"
+            id="signup_email"
+            placeholder="Email"
+            required=""
+          />
+          <input
+            type="number"
+            name="phone"
+            id="phone"
+            placeholder="Phone number"
+            required=""
+          />
+          <input
+            type="password"
+            name="password"
+            id="signup_password"
+            placeholder="Password"
+            required=""
+          />
+          <button>Sign up</button>
+        </form>
+        <ul id="ul1"></ul>
+      </div>
+
+      <div class="login">
+        <form action="/login" method="post" id="login_form">
+          <label for="chk">Login</label>
+          <input
+            type="email"
+            name="login_email"
+            id="login_email"
+            placeholder="Email"
+            required=""
+          />
+          <input
+            type="password"
+            name="login_password"
+            id="login_password"
+            placeholder="Password"
+            required=""
+          />
+          <button>Login</button>
+        </form>
+        <button class="forgot_password">Forgot Password</button>
+        <ul id="ul2"></ul>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src="signup_login.js"></script>
+  </body>
+</html>

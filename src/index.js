@@ -6,7 +6,11 @@ const signup_login = require("./routes/signup_login");
 const db = require("./models/index");
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5500",
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -15,6 +19,6 @@ app.use("/", signup_login);
 app.listen(PORT, () => {
   console.log(`server is running on port: ${PORT}`);
   if (SYNC_DB) {
-    db.sequelize.sync({ alter: true });
+    db.sequelize.sync({ force: true });
   }
 });

@@ -17,13 +17,17 @@ class ChatRepository {
     }
   }
 
+  async get_user() {
+    try {
+    } catch (error) {
+      console.log("Something went wrong in repository layer");
+      throw { error };
+    }
+  }
+
   async getChats() {
     try {
       const chats = await Chat.findAll();
-
-      if (chats.length == 0) {
-        throw { error: "Chat room is empty" };
-      }
       return chats;
     } catch (error) {
       console.log("something went wrong in repository layer");

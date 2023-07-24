@@ -73,8 +73,8 @@ function login_submit(e) {
 
       localStorage.setItem("userId", res);
       ull.innerHTML = "";
-      alert("Logged in successfully");
-      //window.location.href = "/UI/Expenses/expense.html";
+      //alert("Logged in successfully");
+      window.location.href = "/UI/Chat-folder/chat.html";
     } catch (error) {
       const error_data = error.response.data.err;
       const error_object = error_data.error;

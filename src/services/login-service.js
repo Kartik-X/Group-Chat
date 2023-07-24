@@ -48,14 +48,16 @@ class UserService {
   async forgotPassword(login_email) {
     try {
       const user = await userrepository.getByEmail(login_email);
+      console.log(user);
 
       const resetToken = uuidv4();
+      console.log(resetToken);
 
       const forgotToken = await userrepository.Post_forgotToken(
         resetToken,
         user.id
       );
-
+      console.log(forgotToken);
       const tranEmailApi = new Sib.TransactionalEmailsApi();
 
       const sender = {
@@ -74,7 +76,7 @@ class UserService {
         to: recievers,
         subject: "Password reset ",
         textContent: `<h3>Kindly click on the below link to reset your password</h3>
-        <a href="http://13.51.205.119:5000/resetpasswordForm/${resetToken}">Reset Password</a>
+        <a href="http://localhost:4000/resetpasswordForm/${resetToken}">Reset Password</a>
         
         cheers`,
       });

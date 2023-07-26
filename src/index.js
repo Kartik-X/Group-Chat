@@ -25,6 +25,7 @@ app.use("/", chats);
 
 app.listen(PORT, () => {
   console.log(`server is running on port: ${PORT}`);
+
   if (SYNC_DB) {
     db.sequelize.sync({ alter: true });
   }

@@ -13,7 +13,8 @@ body{
     margin-top: 650px;
     border-radius: 5px;
     height:30px;
-    width:500px
+    width:500px;
+    
 }
 #btn{
    background-color: rgb(238, 210, 173);
@@ -24,4 +25,13 @@ body{
    border-radius: 5px;
    font-weight: bold;
    cursor: pointer;
+}
+
+#chats{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80%;
+  height: 100px;
+  list-style-type: none;
 }

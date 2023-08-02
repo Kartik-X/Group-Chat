@@ -1,108 +1,139 @@
 const message = document.getElementById("msgs");
 const send = document.getElementById("btn");
 const chats = document.getElementById("chats");
-var arr = [];
-//localStorage.removeItem("message");
-if (!localStorage.getItem("message")) {
-  async function getdata() {
-    const chat_data = await axios.get("http://localhost:4000/chats");
-    const chat_data_size = chat_data.data.data;
+const grp = document.getElementById("grp_btn");
+const grp_container = document.getElementById("group-wrapper");
+const CreateGrp_btn = document.getElementById("create_grp");
+const Adduser_btn = document.getElementById("add_user");
+const Adminstatus_btn = document.getElementById("admin_status");
+const Removeuser_btn = document.getElementById("remove_user");
+const grp_btn_user = document.getElementById("grp_btn_user");
+const grp_btn_admin = document.getElementById("grp_btn_admin");
+const grp_btn_remove = document.getElementById("grp_btn_remove");
+let last_id = null;
 
-    for (let i = 0; i < chat_data_size.length; i++) {
-      onsubmit(chat_data.data.data[i], i);
-    }
-    localStorage.setItem("message", JSON.stringify(arr));
-  }
-  function onsubmit(data, i) {
-    const user_chats = data.chats;
-    const username = data.username;
+CreateGrp_btn.addEventListener("click", () => {
+  document.getElementById("groupDetails").classList.toggle("active");
+});
+grp.addEventListener("click", async (e) => {
+  e.preventDefault();
 
-    const li = document.createElement("li");
-    li.innerText = `${username}: ${user_chats}`;
-    chats.appendChild(li);
+  document.getElementById("groupDetails").classList.toggle("active");
 
-    arr.push({ id: i + 1, msgs: user_chats, name: username });
-  }
-  getdata();
-} else {
-  const get_msgs = JSON.parse(localStorage.getItem("message"));
+  const grp_name = document.getElementById("grp_name").value;
+  const obj = {
+    name: grp_name,
+  };
+  // let li = document.createElement("li");
+  // li.innerHTML = `<span id='chat_grp_name'>${grp_name}</span>`;
+  // grp_container.append(li);
+  // grp_name.value = "";
 
-  for (let i = 0; i < get_msgs.length; i++) {
-    const chat_msg = get_msgs[i].msgs;
-    const chat_name = get_msgs[i].name;
-    const li = document.createElement("li");
-    li.innerText = `${chat_name}: ${chat_msg}`;
-    chats.appendChild(li);
+  const token = localStorage.getItem("userId");
+  const config = { headers: { Authorization: token } };
+  const post_grp = await axios.post("http://localhost:4000/group", obj, config);
+  window.location.reload();
+});
+
+Adduser_btn.addEventListener("click", () => {
+  document.getElementById("groupDetails_adduser").classList.toggle("active");
+});
+
+grp_btn_user.addEventListener("click", async (e) => {
+  e.preventDefault();
+  document.getElementById("groupDetails_adduser").classList.toggle("active");
+});
+
+Adminstatus_btn.addEventListener("click", () => {
+  document.getElementById("groupDetails_admin").classList.toggle("active");
+});
+
+grp_btn_admin.addEventListener("click", async (e) => {
+  e.preventDefault();
+  document.getElementById("groupDetails_admin").classList.toggle("active");
+});
+
+Removeuser_btn.addEventListener("click", () => {
+  document.getElementById("groupDetails_remove").classList.toggle("active");
+});
+
+grp_btn_remove.addEventListener("click", async (e) => {
+  e.preventDefault();
+  document.getElementById("groupDetails_remove").classList.toggle("active");
+});
+
+async function getGroups() {
+  const token = localStorage.getItem("userId");
+  const config = { headers: { Authorization: token } };
+  const response = await axios.get("http://localhost:4000/get-groups", config);
+
+  const group_data = response.data.data;
+  console.log(group_data);
+
+  for (let i = 0; i < group_data.length; i++) {
+    const grp_li = document.createElement("li");
+    grp_li.innerText = group_data[i].name;
+    grp_container.appendChild(grp_li);
+
+    grp_li.addEventListener("click", async () => {
+      localStorage.setItem("group", group_data[i].id);
+      window.location.reload();
+    });
   }
 }
-
+getGroups();
 async function get_chat() {
-  const get_msgs = JSON.parse(localStorage.getItem("message"));
-  const existing_data = JSON.parse(localStorage.getItem("message")) || [];
-
-  const getChat = await axios.get(
-    `http://localhost:4000/chat/${get_msgs.length}`
-  );
-
-  const data = getChat.data.data;
-
-  const data_size = data.length;
-  let j = 0;
-  let k = 0;
-  if (data.length > 0) {
-    for (j = data[j].id; j <= data[data_size - 1].id; j++) {
-      const li = document.createElement("li");
-      li.innerText = `${data[k].username}: ${data[k].chats}`;
-      chats.appendChild(li);
-      existing_data.push({
-        id: j,
-        msgs: data[k].chats,
-        name: data[k].username,
-      });
-      k++;
-    }
+  const grp_id = localStorage.getItem("group");
+  const getChat = await axios.get(`http://localhost:4000/chats/${grp_id}`);
+  const msg_data = getChat.data.data;
+  console.log(msg_data);
+  last_id = msg_data[0].id;
+  for (let i = msg_data.length - 1; i >= 0; i--) {
+    const chat_name = msg_data[i].username;
+    const chat_msg = msg_data[i].chats;
+    const li = document.createElement("li");
+    li.innerText = `${chat_name} : ${chat_msg}`;
+    chats.appendChild(li);
   }
-
-  localStorage.setItem("message", JSON.stringify(existing_data));
 }
 get_chat();
 
-setInterval(() => {
-  get_chat();
-}, 1000);
+async function nextMessages() {
+  const grp_id = localStorage.getItem("group");
+  const getChat = await axios.get(`http://localhost:4000/chats/${grp_id}`);
+
+  const chatdata = getChat.data.data;
+  const filter = chatdata[0].id;
+
+  if (filter > last_id) {
+    let index = 0;
+    while (chatdata[index].id != last_id) {
+      const chatname = chatdata[index].username;
+      const chat_msg = chatdata[index].chats;
+      const li = document.createElement("li");
+      li.innerText = `${chatname} : ${chat_msg}`;
+      chats.appendChild(li);
+      index++;
+    }
+    last_id = filter;
+  }
+}
+// nextMessages();
+// setInterval(() => {
+//   nextMessages();
+// }, 1000);
 
 send.addEventListener("click", async (e) => {
-  get_chat();
   const obj = {
     chats: message.value,
     userId: localStorage.getItem("userId"),
+    groupId: localStorage.getItem("group"),
   };
+
   const token = localStorage.getItem("userId");
   const config = { headers: { Authorization: token } };
 
   const msg = await axios.post("http://localhost:4000/message", obj, config);
-  const chat_name = msg.data.data.username;
 
-  let storage = JSON.parse(localStorage.getItem("message")) || [];
-  const newItem = {
-    id: storage.length + 1,
-    msgs: message.value,
-    name: chat_name,
-  };
   message.value = "";
-  storage.push(newItem);
-  localStorage.setItem("message", JSON.stringify(storage));
-
-  removeExcessItems();
 });
-//localStorage.removeItem("message");
-
-function removeExcessItems() {
-  let storage = JSON.parse(localStorage.getItem("message"));
-
-  if (storage.length > 10) {
-    console.log(storage.length);
-    storage = storage.slice(1);
-    localStorage.setItem("message", JSON.stringify(storage));
-  }
-}

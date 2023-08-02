@@ -7,14 +7,94 @@
     <title>Chat</title>
   </head>
   <body>
-    <ul id="chats"></ul>
-
-    <textarea
-      type="text"
-      id="msgs"
-      placeholder="Type your message..."
-    ></textarea>
-    <button id="btn">Send</button>
+    <div class="container-wrapper">
+      <div class="group-details-wrapper">
+        <div id="groupDetails">
+          <button id="create_grp">Create Group</button>
+          <form action="" id="form_create_grp">
+            <input
+              type="text"
+              id="grp_name"
+              placeholder="Group Name"
+              required=""
+            />
+            <button type="submit" id="grp_btn">Submit</button>
+          </form>
+        </div>
+        <div id="groupDetails_adduser">
+          <button id="add_user">Add User</button>
+          <form action="" id="form_adduser">
+            <input
+              type="text"
+              id="grpname"
+              placeholder="Group detail"
+              required=""
+            />
+            <input
+              type="text"
+              id="grpuser"
+              placeholder="User detail"
+              required=""
+            />
+            <button type="submit" id="grp_btn_user">Submit</button>
+          </form>
+        </div>
+        <div id="groupDetails_admin">
+          <button id="admin_status">Admin Status</button>
+          <form action="" id="form_admin">
+            <input
+              type="text"
+              id="admin_grpname"
+              placeholder="Group detail"
+              required=""
+            />
+            <input
+              type="text"
+              id="admin_grpuser"
+              placeholder="User detail"
+              required=""
+            />
+            Admin:
+            <select name="admin_status" id="user_adminstatus">
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+            <button type="submit" id="grp_btn_admin">Submit</button>
+          </form>
+        </div>
+        <div id="groupDetails_remove">
+          <button id="remove_user">Remove User</button>
+          <form action="" id="form_remove">
+            <input
+              type="text"
+              id="remove_grpname"
+              placeholder="Group detail"
+              required=""
+            />
+            <input
+              type="text"
+              id="remove_grpuser"
+              placeholder="User detail"
+              required=""
+            />
+            <button type="submit" id="grp_btn_remove">Submit</button>
+          </form>
+        </div>
+      </div>
+      <ul id="chats"></ul>
+      <div class="group-name-wrapper">
+        <h1 id="my_grp">My Groups</h1>
+        <ul id="group-wrapper"></ul>
+      </div>
+    </div>
+    <div id="textarea_msg">
+      <textarea
+        type="text"
+        id="msgs"
+        placeholder="Type your message..."
+      ></textarea>
+      <button id="btn">Send</button>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
     <script src="chat.js"></script>
   </body>

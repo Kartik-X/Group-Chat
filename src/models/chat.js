@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
         onDelete: "CASCADE",
       });
+      Chat.belongsTo(models.Group, {
+        foreignKey: "groupId",
+        onDelete: "CASCADE",
+      });
     }
   }
   Chat.init(

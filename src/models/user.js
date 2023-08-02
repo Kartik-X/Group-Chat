@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.ForgotPassword, { foreignKey: "userId" });
       User.hasMany(models.Chat, { foreignKey: "userId" });
+      User.belongsToMany(models.Group, {
+        as: "Groups",
+        through: "GroupUser",
+      });
     }
   }
   User.init(

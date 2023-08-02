@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
 
 class ChatRepository {
-  async createChat({ chats, userId }, username) {
+  async createChat({ chats, userId, groupId }, username) {
     const userid = jwt.verify(userId, JWT_KEY).userId;
 
     try {
@@ -12,6 +12,7 @@ class ChatRepository {
         chats,
         username,
         userId: userid,
+        groupId,
       });
       return chat;
     } catch (error) {
@@ -20,26 +21,31 @@ class ChatRepository {
     }
   }
 
-  async get_user(startId) {
+  // async get_user() {
+  //   try {
+  //     const chat = await Chat.findAll({
+  //       order: [["createdAt", "DESC"]],
+  //       limit: 10,
+  //     });
+  //     console.log(chat);
+  //     return chat;
+  //   } catch (error) {
+  //     console.log("Something went wrong in repository layer");
+  //     throw { error };
+  //   }
+  // }
+
+  async getChats(group_id) {
     try {
       const chat = await Chat.findAll({
         where: {
-          id: {
-            [Op.gt]: startId,
-          },
+          groupId: group_id,
         },
+        order: [["createdAt", "DESC"]],
+        limit: 10,
       });
-      return chat;
-    } catch (error) {
-      console.log("Something went wrong in repository layer");
-      throw { error };
-    }
-  }
 
-  async getChats() {
-    try {
-      const chats = await Chat.findAll();
-      return chats;
+      return chat;
     } catch (error) {
       console.log("something went wrong in repository layer");
       throw { error };

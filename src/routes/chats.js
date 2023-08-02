@@ -10,8 +10,8 @@ router.post(
   chat_controller.Create_Chat
 );
 
-router.get("/chat/:id", chat_controller.Get_user);
+//router.get("/chat", chat_controller.Get_user);
 
-router.get("/chats", chat_controller.Get_Chat);
+router.get("/chats/:grp_id", chat_controller.Get_Chat);
 
 module.exports = router;

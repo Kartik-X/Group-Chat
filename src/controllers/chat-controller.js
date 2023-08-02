@@ -22,8 +22,9 @@ const Create_Chat = async (req, res) => {
   }
 };
 const Get_Chat = async (req, res) => {
+  console.log(req.params.grp_id);
   try {
-    const get_chats = await chatrepository.getChats();
+    const get_chats = await chatrepository.getChats(req.params.grp_id);
 
     return res.status(201).json({
       data: get_chats,
@@ -44,7 +45,7 @@ const Get_Chat = async (req, res) => {
 
 const Get_user = async (req, res) => {
   try {
-    const get_chats = await chatrepository.get_user(req.params.id);
+    const get_chats = await chatrepository.get_user();
 
     return res.status(201).json({
       data: get_chats,

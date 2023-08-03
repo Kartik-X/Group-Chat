@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const { GroupUser } = require("./index");
 const bcrypt = require("bcrypt");
 const { SALT } = require("../config/serverConfig");
 module.exports = (sequelize, DataTypes) => {
@@ -8,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.ForgotPassword, { foreignKey: "userId" });
       User.hasMany(models.Chat, { foreignKey: "userId" });
       User.belongsToMany(models.Group, {
-        as: "Groups",
-        through: "GroupUser",
+        through: models.GroupUser,
+        foreignKey: "userId",
       });
     }
   }

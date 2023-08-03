@@ -15,4 +15,10 @@ router.get(
   groupController.get_groups
 );
 
+router.post("/group-add-user", groupController.add_user_group);
+
+router.patch("/admin-update", groupController.adminUpdate);
+
+router.delete("/delete-user", groupController.deleteUser);
+
 module.exports = router;

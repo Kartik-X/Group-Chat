@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const { GroupUser } = require("./index");
 module.exports = (sequelize, DataTypes) => {
   class Group extends Model {
     /**
@@ -9,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Group.hasMany(models.Chat, { foreignKey: "groupId" });
-      Group.belongsToMany(models.Group, {
-        as: "Users",
-        through: "GroupUser",
+      Group.belongsToMany(models.User, {
+        through: models.GroupUser,
+        foreignKey: "groupId",
       });
     }
   }

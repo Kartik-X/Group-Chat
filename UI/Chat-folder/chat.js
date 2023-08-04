@@ -10,6 +10,14 @@ const Removeuser_btn = document.getElementById("remove_user");
 const grp_btn_user = document.getElementById("grp_btn_user");
 const grp_btn_admin = document.getElementById("grp_btn_admin");
 const grp_btn_remove = document.getElementById("grp_btn_remove");
+const grp_del = document.getElementById("delete_grp");
+const grp_btn_del = document.getElementById("grp_btn_del");
+let ul_remove = document.getElementById("ul_remove");
+let ul_admin = document.getElementById("ul_admin");
+let ul_adduser = document.getElementById("ul_adduser");
+let ul_creategrp = document.getElementById("ul_creategrp");
+let ul_deluser = document.getElementById("ul_deluser");
+
 let last_id = null;
 
 CreateGrp_btn.addEventListener("click", () => {
@@ -18,17 +26,26 @@ CreateGrp_btn.addEventListener("click", () => {
 grp.addEventListener("click", async (e) => {
   e.preventDefault();
 
-  document.getElementById("groupDetails").classList.toggle("active");
-
   const grp_name = document.getElementById("grp_name").value;
   const obj = {
     name: grp_name,
   };
-  // let li = document.createElement("li");
-  // li.innerHTML = `<span id='chat_grp_name'>${grp_name}</span>`;
-  // grp_container.append(li);
-  // grp_name.value = "";
-
+  try {
+    const token = localStorage.getItem("userId");
+    const config = { headers: { Authorization: token } };
+    const post_grp = await axios.post(
+      "http://localhost:4000/group",
+      obj,
+      config
+    );
+    window.location.reload();
+  } catch (error) {
+    ul_creategrp.innerHTML = "";
+    const err_obj = error.response.data.err.error;
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${err_obj}</span>`;
+    ul_creategrp.appendChild(li);
+  }
   const token = localStorage.getItem("userId");
   const config = { headers: { Authorization: token } };
   const post_grp = await axios.post("http://localhost:4000/group", obj, config);
@@ -41,7 +58,35 @@ Adduser_btn.addEventListener("click", () => {
 
 grp_btn_user.addEventListener("click", async (e) => {
   e.preventDefault();
-  document.getElementById("groupDetails_adduser").classList.toggle("active");
+
+  const grp_detail = document.getElementById("grpname").value;
+  const user_detail = document.getElementById("grpuser").value;
+
+  const obj = {
+    GroupId: grp_detail,
+    user_detail: user_detail,
+  };
+  try {
+    const token = localStorage.getItem("userId");
+    const config = { headers: { Authorization: token } };
+
+    const Add_User = await axios.post(
+      "http://localhost:4000/group-add-user",
+      obj,
+      config
+    );
+    const msg_detail = Add_User.data;
+    const msg = msg_detail.message;
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${msg}</span>`;
+    ul_adduser.appendChild(li);
+  } catch (error) {
+    ul_adduser.innerHTML = "";
+    const err_obj = error.response.data.err.error;
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${err_obj}</span>`;
+    ul_adduser.appendChild(li);
+  }
 });
 
 Adminstatus_btn.addEventListener("click", () => {
@@ -50,7 +95,38 @@ Adminstatus_btn.addEventListener("click", () => {
 
 grp_btn_admin.addEventListener("click", async (e) => {
   e.preventDefault();
-  document.getElementById("groupDetails_admin").classList.toggle("active");
+  ul_admin.innerHTML = "";
+
+  const admin_grp = document.getElementById("admin_grpname").value;
+  const admin_user = document.getElementById("admin_grpuser").value;
+  const admin_status = document.getElementById("user_adminstatus").value;
+
+  const obj = {
+    GroupId: admin_grp,
+    user_detail: admin_user,
+    admin_status: admin_status,
+  };
+  try {
+    const token = localStorage.getItem("userId");
+    const config = { headers: { Authorization: token } };
+
+    const user_adminStatus = await axios.patch(
+      "http://localhost:4000/admin-update",
+      obj,
+      config
+    );
+    const msg_detail = user_adminStatus.data;
+    const msg = msg_detail.message;
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${msg}</span>`;
+    ul_admin.appendChild(li);
+  } catch (error) {
+    ul_admin.innerHTML = "";
+    const err_obj = error.response.data.err.error;
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${err_obj}</span>`;
+    ul_admin.appendChild(li);
+  }
 });
 
 Removeuser_btn.addEventListener("click", () => {
@@ -59,7 +135,59 @@ Removeuser_btn.addEventListener("click", () => {
 
 grp_btn_remove.addEventListener("click", async (e) => {
   e.preventDefault();
-  document.getElementById("groupDetails_remove").classList.toggle("active");
+  ul_remove.innerHTML = "";
+  let remove_grp = document.getElementById("remove_grpname").value;
+  let remove_user = document.getElementById("remove_grpuser").value;
+
+  try {
+    const token = localStorage.getItem("userId");
+    const config = { headers: { Authorization: token } };
+    const user_delete = await axios.delete(
+      `http://localhost:4000/delete-user?GroupId=${remove_grp}&user_details=${remove_user}`,
+      config
+    );
+
+    const msg_detail = user_delete.data;
+    const msg = msg_detail.message;
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${msg}</span>`;
+    ul_remove.appendChild(li);
+  } catch (error) {
+    ul_remove.innerHTML = "";
+    const err_obj = error.response.data.err.error;
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${err_obj}</span>`;
+    ul_remove.appendChild(li);
+  }
+});
+
+grp_del.addEventListener("click", () => {
+  document.getElementById("groupDetails_del_user").classList.toggle("active");
+});
+
+grp_btn_del.addEventListener("click", async (e) => {
+  e.preventDefault();
+  ul_deluser.innerHTML = "";
+  const del_grpname = document.getElementById("del_grpname").value;
+  try {
+    const token = localStorage.getItem("userId");
+    const config = { headers: { Authorization: token } };
+    const grp_delete = await axios.delete(
+      `http://localhost:4000/delete-grp/${del_grpname}`,
+      config
+    );
+    const msg_detail = grp_delete.data;
+    const msg = msg_detail.message;
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${msg}</span>`;
+    ul_deluser.appendChild(li);
+  } catch (error) {
+    ul_deluser.innerHTML = "";
+    const err_obj = error.response.data.err.error;
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${err_obj}</span>`;
+    ul_deluser.appendChild(li);
+  }
 });
 
 async function getGroups() {
@@ -72,7 +200,7 @@ async function getGroups() {
 
   for (let i = 0; i < group_data.length; i++) {
     const grp_li = document.createElement("li");
-    grp_li.innerText = group_data[i].name;
+    grp_li.innerHTML = `<span id="user_grp">${group_data[i].name}</span>`;
     grp_container.appendChild(grp_li);
 
     grp_li.addEventListener("click", async () => {

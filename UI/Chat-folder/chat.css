@@ -37,6 +37,10 @@ body{
    font-weight: bold;
    cursor: pointer;
 }
+span#user_grp{
+    padding: 3px;
+    background-color: #d7e2df;
+}
 #group-wrapper {
     list-style-type: none;
     padding-left: 0;
@@ -130,7 +134,7 @@ body{
     border-radius: 8px;
     font-weight: bolder;
     font-size: 20px;
-    margin-top: 40px;
+    margin-top: 70px;
     margin-left: 30px;
 }
 #groupDetails_adduser.active #form_adduser {
@@ -152,7 +156,7 @@ body{
     border-radius: 8px;
     font-weight: bolder;
     font-size: 20px;
-    margin-top: 40px;
+    margin-top: 70px;
     margin-left: 30px;
 }
 
@@ -175,13 +179,33 @@ body{
     border-radius: 8px;
     font-weight: bolder;
     font-size: 20px;
-    margin-top: 40px;
+    margin-top: 70px;
     margin-left: 30px;
 }
 #groupDetails_remove.active  #form_remove  {
     display: block;
 }
-
+#groupDetails_del_user #form_deluser {
+    display: none;
+}
+#groupDetails_del_user #delete_grp { 
+    list-style: none; 
+    position: relative;
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: bolder;
+    font-size: 20px;
+    margin-top: 70px;
+    margin-left: 30px;
+}
+#groupDetails_del_user.active  #form_deluser  {
+    display: block;
+}
 #grp_name{
     margin-top: 10px;
     border:3px solid black;
@@ -191,7 +215,7 @@ body{
 }
 
 
-#grpname,#grpuser,#admin_grpname,#admin_grpuser,#remove_grpname,#remove_grpuser{
+#grpname,#grpuser,#admin_grpname,#admin_grpuser,#remove_grpname,#remove_grpuser,#del_grpname{
     margin-top: 5px;
     border:3px solid black;
     border-radius: 5px;
@@ -199,7 +223,7 @@ body{
 }
 
 
-#grp_btn,#grp_btn_user,#grp_btn_admin,#grp_btn_remove{
+#grp_btn,#grp_btn_user,#grp_btn_admin,#grp_btn_remove,#grp_btn_del{
 background-color: #20c997;
 height: 30px;
 font-weight: bolder;
@@ -217,3 +241,19 @@ border-radius: 5px;;
     font-weight: bold;
     align-self: baseline;
 }
+
+span#user_grp{
+    padding: 6px 12px 6px 12px;
+    background-color: #1fe9b3;
+    color:black;
+    cursor:pointer
+}
+
+#ul_remove,#ul_admin,#ul_adduser,#ul_creategrp,#ul_deluser{
+    list-style: none; 
+    color:red;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 20px;
+}
+

@@ -24,7 +24,7 @@ class GroupRepository {
     }
   }
 
-  async addUser({ GroupId, user_detail }) {
+  async addUser({ GroupId, user_detail }, Logged_user) {
     try {
       const user = await User.findOne({
         where: {
@@ -37,24 +37,26 @@ class GroupRepository {
       const admin_check = await GroupUser.findOne({
         where: {
           GroupId: group.id,
-          UserId: user.id,
+          UserId: Logged_user.id,
         },
       });
 
-      if (admin_check.isAdmin == true) {
+      if (admin_check == null) {
+        throw { error: "User not found" };
+      } else if (admin_check.isAdmin == false) {
+        throw { error: "Insufficient Privilages to add the user" };
+      } else if (admin_check.isAdmin == true) {
         const userAdded = await group.addUser(user.id, {
           through: { isAdmin: false },
         });
         return userAdded;
-      } else {
-        throw { error: "User not found" };
       }
     } catch (error) {
       console.log("something went wrong in repository layer");
       throw { error };
     }
   }
-  async User_adminUpdate({ GroupId, user_detail, admin_status }) {
+  async User_adminUpdate({ GroupId, user_detail, admin_status }, Logged_user) {
     try {
       const group = await Group.findOne({
         where: {
@@ -69,10 +71,14 @@ class GroupRepository {
       const admin_check = await GroupUser.findOne({
         where: {
           GroupId: group.id,
-          UserId: user.id,
+          UserId: Logged_user.id,
         },
       });
-      if (admin_check.isAdmin == true) {
+      if (admin_check == null) {
+        throw { error: "User not found" };
+      } else if (admin_check.isAdmin == false) {
+        throw { error: "Insufficient Privilages to update user Status" };
+      } else if (admin_check.isAdmin == true) {
         const update_status = await GroupUser.update(
           { isAdmin: admin_status },
           {
@@ -83,8 +89,6 @@ class GroupRepository {
           }
         );
         return update_status;
-      } else {
-        throw { error: "Insufficient Privilages to update user Status" };
       }
     } catch (error) {
       console.log("something went wrong in repository layer");
@@ -92,8 +96,7 @@ class GroupRepository {
     }
   }
 
-  async UserDelete(GroupId, user_detail) {
-    console.log(GroupId, user_detail);
+  async UserDelete(GroupId, user_detail, Logged_user) {
     try {
       const group = await Group.findOne({
         where: {
@@ -108,9 +111,14 @@ class GroupRepository {
       const admin_check = await GroupUser.findOne({
         where: {
           GroupId: group.id,
-          UserId: user.id,
+          UserId: Logged_user.id,
         },
       });
+      if (admin_check == null) {
+        throw { error: "User not found" };
+      } else if (admin_check.isAdmin == false) {
+        throw { error: "Insufficient Privilages to delete user" };
+      }
       if (admin_check.isAdmin == true) {
         const deleteUser = await GroupUser.destroy({
           where: {
@@ -119,12 +127,36 @@ class GroupRepository {
           },
         });
         return true;
-      } else {
-        throw { error: "Insufficient privilages to delete the user" };
       }
     } catch (error) {
       console.log("something went wrong in repository layer");
-      throw { error };
+      throw error;
+    }
+  }
+  async delete_Grp(groupId, userId) {
+    try {
+      const admin_check = await GroupUser.findOne({
+        where: {
+          GroupId: groupId,
+          UserId: userId,
+        },
+      });
+      if (admin_check == null) {
+        throw { error: "User not found" };
+      } else if (admin_check.isAdmin == false) {
+        throw { error: "Insufficient Privilages to delete group" };
+      }
+      if (admin_check.isAdmin == true) {
+        const deleteGrp = await Group.destroy({
+          where: {
+            id: groupId,
+          },
+        });
+        return true;
+      }
+    } catch (error) {
+      console.log("something went wrong in repository layer");
+      throw error;
     }
   }
 }

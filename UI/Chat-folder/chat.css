@@ -58,6 +58,10 @@ span#user_grp{
     justify-content: space-between;
     align-items: center;
 }
+#group-wrapper li.active span{
+    background-color: #110d0d;
+    color: #fff;
+}
 #group-wrapper span {
     padding: 10px;
     color: #fff;

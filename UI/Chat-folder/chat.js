@@ -18,6 +18,8 @@ let ul_adduser = document.getElementById("ul_adduser");
 let ul_creategrp = document.getElementById("ul_creategrp");
 let ul_deluser = document.getElementById("ul_deluser");
 
+const socket = io("http://localhost:4000");
+
 let last_id = null;
 
 CreateGrp_btn.addEventListener("click", () => {
@@ -196,13 +198,15 @@ async function getGroups() {
   const response = await axios.get("http://localhost:4000/get-groups", config);
 
   const group_data = response.data.data;
-  console.log(group_data);
 
   for (let i = 0; i < group_data.length; i++) {
     const grp_li = document.createElement("li");
     grp_li.innerHTML = `<span id="user_grp">${group_data[i].name}</span>`;
-    grp_container.appendChild(grp_li);
 
+    if (localStorage.getItem("group") == group_data[i].id) {
+      grp_li.classList.add("active");
+    }
+    grp_container.appendChild(grp_li);
     grp_li.addEventListener("click", async () => {
       localStorage.setItem("group", group_data[i].id);
       window.location.reload();
@@ -214,7 +218,7 @@ async function get_chat() {
   const grp_id = localStorage.getItem("group");
   const getChat = await axios.get(`http://localhost:4000/chats/${grp_id}`);
   const msg_data = getChat.data.data;
-  console.log(msg_data);
+
   last_id = msg_data[0].id;
   for (let i = msg_data.length - 1; i >= 0; i--) {
     const chat_name = msg_data[i].username;
@@ -246,10 +250,11 @@ async function nextMessages() {
     last_id = filter;
   }
 }
-// nextMessages();
-// setInterval(() => {
-//   nextMessages();
-// }, 1000);
+
+socket.on("msg_to_client", () => {
+  console.log("hello from client");
+  nextMessages();
+});
 
 send.addEventListener("click", async (e) => {
   const obj = {
@@ -264,4 +269,5 @@ send.addEventListener("click", async (e) => {
   const msg = await axios.post("http://localhost:4000/message", obj, config);
 
   message.value = "";
+  socket.emit("msg_sent");
 });

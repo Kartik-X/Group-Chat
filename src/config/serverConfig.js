@@ -16,5 +16,8 @@ module.exports = {
   PORT: process.env.PORT || 4000,
   JWT_KEY: process.env.JWT_KEY,
   SALT: bcrypt.genSaltSync(10),
+  Bucket_Name: process.env.BUCKET_NAME,
+  I_Am_UserKey: process.env.IAM_USER_KEY,
+  I_Am_userSecret: process.env.IAM_USER_SECRET,
   SYNC_DB: process.env.SYNC_DB,
 };

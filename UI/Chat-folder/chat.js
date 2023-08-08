@@ -17,10 +17,10 @@ let ul_admin = document.getElementById("ul_admin");
 let ul_adduser = document.getElementById("ul_adduser");
 let ul_creategrp = document.getElementById("ul_creategrp");
 let ul_deluser = document.getElementById("ul_deluser");
+const share = document.getElementById("uploadForm");
+let last_id = null;
 
 const socket = io("http://localhost:4000");
-
-let last_id = null;
 
 CreateGrp_btn.addEventListener("click", () => {
   document.getElementById("groupDetails").classList.toggle("active");
@@ -269,5 +269,26 @@ send.addEventListener("click", async (e) => {
   const msg = await axios.post("http://localhost:4000/message", obj, config);
 
   message.value = "";
+  socket.emit("msg_sent");
+});
+
+share.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const grpId = localStorage.getItem("group");
+  const fileInput = document.getElementById("fileInput");
+  let selectedFile = fileInput.files[0];
+
+  const formData = new FormData();
+  formData.append("file", selectedFile);
+  formData.append("groupId", grpId);
+  const token = localStorage.getItem("userId");
+  const config = { headers: { Authorization: token } };
+
+  const response = await axios.post(
+    "http://localhost:4000/multimedia-share",
+    formData,
+    config
+  );
+  selectedFile = "";
   socket.emit("msg_sent");
 });

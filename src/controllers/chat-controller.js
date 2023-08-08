@@ -1,4 +1,6 @@
 const ChatRepository = require("../repository/chats-repository");
+const ChatService = require("../services/chats-service");
+const chatservice = new ChatService();
 const chatrepository = new ChatRepository();
 
 const Create_Chat = async (req, res) => {
@@ -64,8 +66,35 @@ const Get_user = async (req, res) => {
   }
 };
 
+const Multimedia_Chat = async (req, res) => {
+  try {
+    const get_chats = await chatservice.multimedia_chat(
+      req.file,
+      req.user.id,
+      req.body.groupId,
+      req.user.username
+    );
+
+    return res.status(201).json({
+      data: get_chats,
+      success: true,
+      message: "Successfully sent multimedia chats",
+      err: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      data: {},
+      success: false,
+      message: "unable to send multimedia chats",
+      err: error,
+    });
+  }
+};
+
 module.exports = {
   Create_Chat,
   Get_Chat,
   Get_user,
+  Multimedia_Chat,
 };

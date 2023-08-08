@@ -51,5 +51,21 @@ class ChatRepository {
       throw { error };
     }
   }
+
+  async UploadedFile(chats, userId, groupId, username) {
+    console.log(chats, userId, groupId, username);
+    try {
+      const chat = await Chat.create({
+        chats,
+        username,
+        userId,
+        groupId,
+      });
+      return chat;
+    } catch (error) {
+      console.log("something went wrong in repository layer");
+      throw { error };
+    }
+  }
 }
 module.exports = ChatRepository;

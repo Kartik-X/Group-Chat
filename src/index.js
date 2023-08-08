@@ -35,7 +35,6 @@ app.use("/", group);
 
 io.on("connection", (socket) => {
   socket.on("msg_sent", () => {
-    console.log("hello there");
     io.emit("msg_to_client");
   });
 });

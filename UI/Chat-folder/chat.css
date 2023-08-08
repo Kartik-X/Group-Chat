@@ -12,7 +12,7 @@ body{
 #textarea_msg{
     position: fixed;
     bottom: 40px;
-    left: 50%;
+    left: 58%;
     transform: translateX(-50%);
     border-radius: 5px;
     height:30px;
@@ -21,7 +21,6 @@ body{
 }
 #textarea_msg textarea {
     width: 320px;
-    /* height: 50px; */
     resize: none;
     border: 1px solid;
     margin-right: 10px;
@@ -30,8 +29,6 @@ body{
 #btn{
    background-color: rgb(238, 210, 173);
    position: absolute;
-   /* margin-bottom: 400px;
-   margin-left: 810px; */
    padding:6px 10px 6px 10px;
    border-radius: 5px;
    font-weight: bold;
@@ -59,7 +56,7 @@ span#user_grp{
     align-items: center;
 }
 #group-wrapper li.active span{
-    background-color: #110d0d;
+    background-color:rgb(105, 93, 95);
     color: #fff;
 }
 #group-wrapper span {
@@ -218,7 +215,6 @@ span#user_grp{
     margin-left: 35px;
 }
 
-
 #grpname,#grpuser,#admin_grpname,#admin_grpuser,#remove_grpname,#remove_grpuser,#del_grpname{
     margin-top: 5px;
     border:3px solid black;
@@ -226,15 +222,12 @@ span#user_grp{
     height:25px;
 }
 
-
 #grp_btn,#grp_btn_user,#grp_btn_admin,#grp_btn_remove,#grp_btn_del{
 background-color: #20c997;
 height: 30px;
 font-weight: bolder;
 border-radius: 5px;;
 }
-
-
 
 #my_grp{
     padding:8px 20px 8px 20px;
@@ -260,4 +253,38 @@ span#user_grp{
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-size: 20px;
 }
+#file_share {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 70px; /* Move the div down */
+    margin-right:800px; /* Move the div to the right */
+  }
 
+  #share {
+    background-color: #1fe9b3;
+    color: rgb(22, 20, 20);
+    padding: 7px 14px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  #fileLabel {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 40px;
+  }
+  
+  #fileInput {
+    display: none; /* Hide the default input */
+  }
